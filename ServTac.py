@@ -8,10 +8,6 @@ from _thread import *
 # --
 
 
-def main():
-	server_start()
-
-
 
 #Server Initialization
 def server_start():
@@ -43,13 +39,26 @@ def server_start():
 
 # fx send prompt to client to receive input to play game [yes or no]
 # send  table with 1-9 visible also
+
 def threaded_client(conn, addr):
 
-#generate board
-def generateBoard():
+#generate grid
+def generateGrid():
+    g = ''
+    for i in range(5):
+        g += ' '
+        for j in range(3):
+            if i % 2 == 0:
+                g += '   '
+                if j == 0 or j == 1: g += '|'
+            else:
+                g += '--- '
+        g += '\n'
+    return (g)
 
-#generate board index
-def generateBoardIndex():
+
+#generate grid index
+def generateGridIndex():
 
 
 #receive input from player whether X or O
@@ -63,4 +72,4 @@ def generateBoardIndex():
 
 
 if __name__ == "__main__":
-	main()
+	server_start()
