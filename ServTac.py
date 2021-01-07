@@ -24,7 +24,7 @@ def server_start():
 		print(str(e))
 		sys.exit()
 	#Listen for connections
-	soc.listen(5)
+	ServerSocket.listen(5)
 	print("Listening for connections...")
 
 	#Thread start
@@ -37,10 +37,35 @@ def server_start():
 	ServerSocket.close()
 
 
-# fx send prompt to client to receive input to play game [yes or no]
-# send  table with 1-9 visible also
+# send grid with number to user
 
+#receive input from clients yes or no to play
 def threaded_client(conn, addr):
+    welcome = "**Welcome to the Tic Tac Toe Server! :D**
+
+    try:
+    	#send welcome message to client
+        conn.send(welcome.encode(encoding='UTF-8',errors='strict'))
+        while True:
+        	#receive input from client
+            data = conn.recv(2048)
+            #break if no input/error
+            if not data:
+                break
+            #verify input
+            if (data == "Y"):
+            	initGame(conn, addr)
+            #client quit
+            else:
+            	sys.exit()
+
+    except socket.error as e:
+        print("Socket error: %s" % str(e))
+
+    conn.close()
+
+
+
 
 #generate grid
 def generateGrid():
@@ -57,12 +82,23 @@ def generateGrid():
     return (g)
 
 
-#generate grid index
-def generateGridIndex():
+#generate grid with numbers
+def generateGridNum():
+    g = ''
+    for i in range(5):
+        g += ' '
+        for j in range(3):
+            if i % 2 == 0:
+                g += ' ' + str(((i // 2) * 3) + j + 1) + ' '
+                if j == 0 or j == 1: g += '|'
+            else:
+                g += '--- '
+        g += '\n'
+    return (g)
 
 
 #receive input from player whether X or O
-
+def initGame(conn, addr):
 
 #check if win
 
