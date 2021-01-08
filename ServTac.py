@@ -6,7 +6,7 @@ from _thread import *
 
 #init global variables here
 # --
-
+board = [' ' for x in range(10)]
 
 
 #Server Initialization
@@ -67,34 +67,16 @@ def threaded_client(conn, addr):
 
 
 
-#generate grid
-def generateGrid():
-    g = ''
-    for i in range(5):
-        g += ' '
-        for j in range(3):
-            if i % 2 == 0:
-                g += '   '
-                if j == 0 or j == 1: g += '|'
-            else:
-                g += '--- '
-        g += '\n'
-    return (g)
+#generate board
+def generateBoard():
+    print('\t\t\t****************************')
+    print('\t\t\t\t ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
+    print('\t\t\t\t-----------')
+    print('\t\t\t\t ' + board[4] + ' | ' +board[5] + ' | ' + board[6])
+    print('\t\t\t\t-----------')
+    print('\t\t\t\t ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
+    print('\t\t\t****************************')
 
-
-#generate grid with numbers
-def generateGridNum():
-    g = ''
-    for i in range(5):
-        g += ' '
-        for j in range(3):
-            if i % 2 == 0:
-                g += ' ' + str(((i // 2) * 3) + j + 1) + ' '
-                if j == 0 or j == 1: g += '|'
-            else:
-                g += '--- '
-        g += '\n'
-    return (g)
 
 
 #receive input from player whether X or O
