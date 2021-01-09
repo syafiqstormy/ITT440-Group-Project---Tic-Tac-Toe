@@ -7,7 +7,8 @@ from _thread import *
 #init global variables here
 # --
 board = [' ' for x in range(10)]
-
+player_list = []
+count = 0
 
 #Server Initialization
 def server_start():
@@ -41,8 +42,9 @@ def server_start():
 
 #receive input from clients yes or no to play
 def threaded_client(conn, addr):
-    welcome = "**Welcome to the Tic Tac Toe Server! :D**
-
+    welcome = "**Welcome to the Tic Tac Toe Server! :D**\nDo you want to play the game?(yes,no) No to quit"
+    player_list.append(conn)
+    count = count + 1
     try:
     	#send welcome message to client
         conn.send(welcome.encode(encoding='UTF-8',errors='strict'))
@@ -57,7 +59,13 @@ def threaded_client(conn, addr):
             	initGame(conn, addr)
             #client quit
             else:
-            	sys.exit()
+		#remove player_list latest data
+		del player_list[-1]
+		count=count -1
+		goodbye_msg = "Goodbye"
+		print("Client rejected game")
+		conn.send(goodbye_msg.encode(encoding='utf-8', errors='strict'))
+            	return
 
     except socket.error as e:
         print("Socket error: %s" % str(e))
@@ -79,14 +87,51 @@ def generateBoard():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 #receive input from player whether X or O
 def initGame(conn, addr):
+	#first player 
+	if count == 1
+		msgXO = generateBoard() + "\n\nDo you want to be O or X? [O/X]: "
+		conn.send(msgXO.encode())
+		data = conn.recv(1024).decode()
+		print(addr[0] +" is "+ str(data))
+	if data == 'X'
+		player1 = 2
+		player2 = 4
+	else
+		player1 = 4
+		player2 = 2
 
-#check if win
+data = ""
+#While no one has won yet
+while checkWin() == 'Noone':
+	#sends updated board
+	update = generateBoard() + "\nEnter number: " 
+	conn.send(update.encode())
+	#receive input from client
+	data = conn.recv(1024).decode()
 
+	#convert the player move to int to occupy the space in pointer
+	data = pointerEL[int(data)]
+	playerMove(conn,player1,data)
+	if checkWin()!="No"
+		break
 
-#check if tie
-
+message = generateBoard() + '\n\n' + checkWin()
+conn.send(message.encode()) 
 
 
 if __name__ == "__main__":
