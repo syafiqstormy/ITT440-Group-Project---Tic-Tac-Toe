@@ -9,6 +9,11 @@ from _thread import *
 board = [' ' for x in range(10)]
 player_list = []
 count = 0
+num2Eng = {0:' ',1:'0',4:'X'}
+available = [(i,j) for i in range(3) for j in range(3)] 
+pointerEL = {(i*3)+j+1:(i,j) for i in range(3) for j in range(3)}
+
+
 
 #Server Initialization
 def server_start():
@@ -59,7 +64,7 @@ def threaded_client(conn, addr):
             	initGame(conn, addr)
             #client quit
             else:
-		#remove player_list latest data
+		remove player_list latest data
 		del player_list[-1]
 		count=count -1
 		goodbye_msg = "Goodbye"
@@ -77,27 +82,62 @@ def threaded_client(conn, addr):
 
 #generate board
 def generateBoard():
-    print('\t\t\t****************************')
-    print('\t\t\t\t ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
-    print('\t\t\t\t-----------')
-    print('\t\t\t\t ' + board[4] + ' | ' +board[5] + ' | ' + board[6])
-    print('\t\t\t\t-----------')
-    print('\t\t\t\t ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
-    print('\t\t\t****************************')
+    b = ''
+    for i in range(5):
+        b += ' '
+        for j in range(3):
+            if i % 2 == 0:
+                b += ' ' + num2Eng[board[i // 2][j]] + ' '
+                if j == 0 or j == 1: b += '|'
+            else:
+                b += '--- '
+        b += '\n'
+    return b
+
+#player moves
+def playerMove(conn,player,data)
+    i = int(data[0])
+    j = int(data[1])
+
+    if player == 4:
+        print("X at", i, j)
+    else:
+        print("O at", i, j)
+    board[i][j] = player
+    available.pop(available.index((i, j)))
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+#check if win
+def checkWin()
+    #checks if the board is full or not 
+    if len(available) == 0:
+    #returns draw if board is full
+        return "Draw"
+    column = [0, 0, 0]
+    diagonal = [0, 0]
+    for i in range(3):
+        if sum(board[i]) == 3:
+            return 'O Win!'
+        elif sum(board[i]) == 12:
+            return 'X Win!'
+        for j in range(3):
+            if i == j:
+                diagonal[0] += board[i][j]
+            if i + j == 2:
+                diagonal[1] += board[i][j]
+            column[j] += board[i][j]
+    for i in range(3):
+        if column[i] == 3:
+            return 'O Win!'
+        elif coloumn[i] == 12:
+            return 'X Win!'
+    for i in range(2):
+        if diagonal[i] == 3:
+            return 'O Win!'
+        elif diagonal[i] == 12:
+            return 'X Win!'
+    return 'Noone'
 
 
 #receive input from player whether X or O
@@ -108,14 +148,21 @@ def initGame(conn, addr):
 		conn.send(msgXO.encode())
 		data = conn.recv(1024).decode()
 		print(addr[0] +" is "+ str(data))
-	if data == 'X'
-		player1 = 2
-		player2 = 4
-	else
-		player1 = 4
-		player2 = 2
+	if count == 2
+		if data == 'X'
+			msgXO = generateBoard() +"\n\nYou are O!"
+		else
+			msgXO = generateBoard() +"\n\nYou are X!"
 
-data = ""
+
+	if data == 'X'
+		player1 = 4
+		player2 = 1
+	else
+		player1 = 1
+		player2 = 4
+
+
 #While no one has won yet
 while checkWin() == 'Noone':
 	#sends updated board
@@ -127,7 +174,7 @@ while checkWin() == 'Noone':
 	#convert the player move to int to occupy the space in pointer
 	data = pointerEL[int(data)]
 	playerMove(conn,player1,data)
-	if checkWin()!="No"
+	if checkWin()!="Noone"
 		break
 
 message = generateBoard() + '\n\n' + checkWin()
