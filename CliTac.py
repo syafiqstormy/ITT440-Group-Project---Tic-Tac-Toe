@@ -32,10 +32,13 @@ def client_program():
 		#Receive input Do you want to be X or O?
 		if len(Response)!=0:
 			print(Response.decode())
-		playeropt = input("->")
-		playeropt = playeropt.upper()
-		ClientSocket.send(playeropt.encode())
-		Response= ClientSocket.recv(1024).decode()
+		x = re.search("Do",(str(Response)))
+		#if message contains option X or O do
+		if x:
+			playeropt = input("->")
+			playeropt = playeropt.upper()
+			ClientSocket.send(playeropt.encode())
+			Response= ClientSocket.recv(1024).decode()
 		while "Win" or "Tie" not in Response:
 			print("\nBoard:\n+ Response)
 			while True:
