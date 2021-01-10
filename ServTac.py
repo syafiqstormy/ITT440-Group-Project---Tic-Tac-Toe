@@ -154,7 +154,7 @@ def initGame(conn, ip):
         player2 = 4
         player1 = 1
 
-    # If the client type in the wrong input	
+    # If the winner still can not be determined
     data = ""
     while checkWin() == 'No':
         if (data != 'r'):
