@@ -18,7 +18,7 @@ def start_server():
     host = ""
     port = 8888
 
-    # Create a socket
+    # Create socket
     ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     print("Socket created")
