@@ -2,6 +2,7 @@ import socket
 import sys
 from threading import Thread
 
+# Defining variables
 board = [[0, 0, 0],
          [0, 0, 0],
          [0, 0, 0]]
@@ -12,21 +13,25 @@ available = [(i, j) for i in range(3) for j in range(3)]
 pointerEL = {(i * 3) + j + 1: (i, j) for i in range(3) for j in range(3)}
 player_list = []
 
-
+# Server Initialization
 def start_server():
     host = ""
     port = 8888
 
+    # Create a socket
     ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     print("Socket created")
 
+
+    # Binding
     try:
         ServerSocket.bind((host, port))
     except socket.error as e:
         print("Bind failed. Error : " + str(e))
         sys.exit()
 
+    # Listening
     ServerSocket.listen(5)
     print("Socket now listening")
 
@@ -41,23 +46,27 @@ def start_server():
             print("Thread did not start." + str(e))
             ServerSocket.close()
 
-
+# Receive  message from client to determine either they want to play or not
 def threaded_client(c, ip, port):
     global board, num2Eng, available
     player_list.append(port)
     print("Player " + str(len(player_list)) + " port: " + str(port))
 
     while True:
+	# Receive input from client
         data = c.recv(1024).decode()
+	# Break if there is no input or error
         if not data:
             print('break')
             break
+	# Verify input
         print("from connected user: " + str(data))
         if (data == "Yes"):
             board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
             num2Eng = {0: ' ', 1: 'O', 4: 'X'}
             available = [(i, j) for i in range(3) for j in range(3)]
             initGame(c, ip)
+	# Break if client want to quit
         elif (data == "No"):
             break
 
@@ -91,7 +100,7 @@ def genBoardIndex():
         s += '\n'
     return s
 
-
+# To check the result for the client
 def checkWin():
     if len(available) == 0:
         return "Draw"
@@ -120,7 +129,7 @@ def checkWin():
             return 'X Win!'
     return 'No'
 
-
+ # Determine the client's moves and put it in the grid
 def playerMove(player, data):
     i = int(data[0])
     j = int(data[1])
@@ -132,7 +141,7 @@ def playerMove(player, data):
     board[i][j] = player
     available.pop(available.index((i, j)))
 
-
+# Receive input from the client whether they want to be X or O
 def initGame(conn, ip):
     message = genBoardIndex() + "\n\nDo you want to be O or X? [O/X]: "
     conn.send(message.encode())
@@ -145,6 +154,7 @@ def initGame(conn, ip):
         player2 = 4
         player1 = 1
 
+    # If the client type in the wrong input	
     data = ""
     while checkWin() == 'No':
         if (data != 'r'):
