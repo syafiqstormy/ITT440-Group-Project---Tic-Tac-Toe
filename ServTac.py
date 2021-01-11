@@ -14,12 +14,12 @@ player_list = []
 
 
 def start_server():
-    host = ""
+    host = "192.168.0.136"
     port = 8888
 
     ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    print("Socket created")
+    print("Socket was created")
 
     try:
         ServerSocket.bind((host, port))
@@ -28,7 +28,7 @@ def start_server():
         sys.exit()
 
     ServerSocket.listen(5)
-    print("Socket now listening")
+    print("Socket is now listening")
 
     while True:
         connection, address = ServerSocket.accept()
@@ -99,9 +99,9 @@ def checkWin():
     diag = [0, 0]
     for i in range(3):
         if sum(board[i]) == 3:
-            return 'O Win!'
+            return 'O Win! Congratulations!'
         elif sum(board[i]) == 12:
-            return 'X Win!'
+            return 'X Win! Congratulations!'
         for j in range(3):
             if i == j:
                 diag[0] += board[i][j]
@@ -110,14 +110,14 @@ def checkWin():
             col[j] += board[i][j]
     for i in range(3):
         if col[i] == 3:
-            return 'O Win!'
+            return 'O Win! Congratulations!'
         elif col[i] == 12:
-            return 'X Win!'
+            return 'X Win! Congratulations!'
     for i in range(2):
         if diag[i] == 3:
-            return 'O Win!'
+            return 'O Win! Congratulations!'
         elif diag[i] == 12:
-            return 'X Win!'
+            return 'X Win! Congratulations!'
     return 'No'
 
 
@@ -134,7 +134,7 @@ def playerMove(player, data):
 
 
 def initGame(conn, ip):
-    message = genBoardIndex() + "\n\nDo you want to be O or X? [O/X]: "
+    message = genBoardIndex() + "\n\nDo you want to play as O or X? [O/X]: "
     conn.send(message.encode())
     data = conn.recv(1024).decode()
     print(ip[0] + " is", data)
