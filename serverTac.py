@@ -43,6 +43,7 @@ def start_server():
         connection, address = ServerSocket.accept()
         ip, port = str(address[0]), str(address[1])
         player_socket.append(connection)
+        #broadcastMessage("This is a broadcast message!")
         print("Connected with " + ip + ":" + port)
         try:
             Thread(target=threaded_client, args=(connection, ip, port)).start()
@@ -58,7 +59,7 @@ def threaded_client(c, ip, port):
     print("Player " + str(len(player_list)) + " port: " + str(port))
 
     while True:
-	# Receive input from client
+	# Receive Yes or No input from client
         data = c.recv(1024).decode()
 	# Break if there is no input or error
         if not data:
@@ -164,7 +165,7 @@ def initGame(conn, ip):
     conn.send(message.encode())
     #receives X or O from client
     data = conn.recv(1024).decode()
-    print(ip[0] + " is", data)
+    print(ip + " is", data)
     if data.upper() == 'X':
         player1 = 4
         player2 = 1
@@ -185,14 +186,16 @@ def initGame(conn, ip):
             # sends inputted index to grid when client inputs index 
             data = pointerEL[int(data)]
             playerMove(player1, data)
+            if checkWin() != 'No':
+                break
             # generates updated board n broadcasts.
-            updated = genBoardMessage()
-            broadcastMessage(updated)
+            #updated = genBoardMessage()
+            #broadcastMessage(updated)
             # if checkWin returns Yes
-        #if data == 'quit':
-       #     sys.exit()
-      #      if checkWin() != 'No':
-     #           break
+        if data == 'quit':
+            sys.exit()
+            if checkWin() != 'No':
+                break
     #    else:
    #         data = pointerEL[int(data)]
   #          playerMove(player1,data)
