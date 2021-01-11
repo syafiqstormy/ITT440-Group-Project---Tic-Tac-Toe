@@ -90,7 +90,7 @@ def genBoardMessage():
                 s += '--- '
         s += '\n'
     return s
-# prints board with numbers to display initially
+# prints plain board with numbers JUST to display initially
 def genBoardIndex():
     s = ''
     for i in range(5):
