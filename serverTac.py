@@ -194,8 +194,8 @@ def initGame(conn, ip):
             # if checkWin returns Yes
         if data == 'quit':
             sys.exit()
-            if checkWin() != 'No':
-                break
+         #   if checkWin() != 'No':
+          #      break
     #    else:
    #         data = pointerEL[int(data)]
   #          playerMove(player1,data)
