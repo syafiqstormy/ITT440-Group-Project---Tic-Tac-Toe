@@ -25,7 +25,7 @@ def start_server():
     # Create socket
     ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    print("Socket created")
+    print("Socket was created")
 
 
     # Binding
@@ -37,7 +37,7 @@ def start_server():
 
     # Listening
     ServerSocket.listen(5)
-    print("Socket now listening")
+    print("Socket is now listening")
 
     while True:
         connection, address = ServerSocket.accept()
@@ -113,29 +113,29 @@ def checkWin():
     # check all rows for O
     for i in range(3):
         if sum(board[i]) == 3:
-            return 'O Wins!'
+            return 'O Wins! Congratulations!'
         # check all rows for X
         elif sum(board[i]) == 12:
-            return 'X Wins!'
+            return 'X Wins! Congratulations!'
 # check all columns
     for kolum in range(3):
         sumKol=0
         for row in range(3):
             sumKol = sumKol + board[row][kolum]
             if sumKol == 3:
-                return 'O Wins!'
+                return 'O Wins! Congratulations!'
             elif sumKol == 12:
-                return 'X Wins!'
+                return 'X Wins! Congratulations!'
     # check first diagonal that looks like \
     if ((board[0][0])+(board[1][1])+(board[2][2]))== 3:
-        return 'O Wins!'
+        return 'O Wins! Congratulations!'
     elif ((board[0][0])+(board[1][1])+(board[2][2]))== 12:
-        return 'X Wins!'
+        return 'X Wins! Congratulations!'
     # check second diagonal that looks like /
     if ((board[0][2])+(board[1][1])+(board[2][0]))== 3:
-        return 'O Wins!'
+        return 'O Wins! Congratulations!'
     elif ((board[0][2])+(board[1][1])+(board[2][0]))== 12:
-        return 'X Wins!'
+        return 'X Wins! Congratulations!'
     # return when there is no winner or draw.
     return 'No'
 
@@ -161,7 +161,7 @@ def broadcastMessage(msg):
 
 # Receive input from the client whether they want to be X or O
 def initGame(conn, ip):
-    message = genBoardIndex() + "\n\nDo you want to be O or X? [O/X]: "
+    message = genBoardIndex() + "\n\nDo you want to play as O or X? [O/X]: "
     conn.send(message.encode())
     #receives X or O from client
     data = conn.recv(1024).decode()
