@@ -44,7 +44,6 @@ while message.lower().strip() != 'No':
             message = input('Please Enter number 1-9 for index, or enter <r> to display board\n')
             if message in [str(i+1) for i in range(9)] + ['r']:
                 break
-            # ??
         ClientSocket.send(message.encode())
         data = ClientSocket.recv(1024).decode()
     print(data)
